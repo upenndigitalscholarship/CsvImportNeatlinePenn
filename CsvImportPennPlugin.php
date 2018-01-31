@@ -1,21 +1,21 @@
 <?php
 /**
-* CsvImportPlugin class - represents the Csv Import plugin
+* CsvImportPennPlugin class - represents the CSV Import Penn plugin
 *
 * Configuring the plugin:  Set the proper settings in config.ini
 * like so:
 *
 * <code>
-* plugins.CsvImport.columnDelimiter = ","
-* plugins.CsvImport.memoryLimit = "128M"
-* plugins.CsvImport.requiredExtension = "txt"
-* plugins.CsvImport.requiredMimeType = "text/csv"
-* plugins.CsvImport.maxFileSize = "10M"
-* plugins.CsvImport.fileDestination = "/tmp"
-* plugins.CsvImport.batchSize = "1000"
+* plugins.CsvImportPenn.columnDelimiter = ","
+* plugins.CsvImportPenn.memoryLimit = "128M"
+* plugins.CsvImportPenn.requiredExtension = "txt"
+* plugins.CsvImportPenn.requiredMimeType = "text/csv"
+* plugins.CsvImportPenn.maxFileSize = "10M"
+* plugins.CsvImportPenn.fileDestination = "/tmp"
+* plugins.CsvImportPenn.batchSize = "1000"
 * </code>
 *
-* All of the above settings are optional.  If not given, CsvImport uses the
+* All of the above settings are optional.  If not given, CsvImportPenn uses the
 * following default values:
 *
 * memoryLimit = current script limit
@@ -50,20 +50,18 @@
 * the import is completed.
 *
 *
-* @copyright Copyright 2008-2012 Roy Rosenzweig Center for History and New Media
-* @license http://www.gnu.org/licenses/gpl-3.0.txt GNU GPLv3
-* @package CsvImport
+* @package CsvImportPenn
 */
 
-defined('CSV_IMPORT_DIRECTORY') or define('CSV_IMPORT_DIRECTORY', dirname(__FILE__));
+defined('CSV_IMPORT_PENN_DIRECTORY') or define('CSV_IMPORT_PENN_DIRECTORY', dirname(__FILE__));
 
 /**
- * Csv Import plugin.
+ * CSV Import Penn plugin.
  */
-class CsvImportPlugin extends Omeka_Plugin_AbstractPlugin
+class CsvImportPennPlugin extends Omeka_Plugin_AbstractPlugin
 {
-    const MEMORY_LIMIT_OPTION_NAME = 'csv_import_memory_limit';
-    const PHP_PATH_OPTION_NAME = 'csv_import_php_path';
+    const MEMORY_LIMIT_OPTION_NAME = 'csv_import_penn_memory_limit';
+    const PHP_PATH_OPTION_NAME = 'csv_import_penn_php_path';
 
     /**
      * @var array Hooks for the plugin.
@@ -104,7 +102,7 @@ class CsvImportPlugin extends Omeka_Plugin_AbstractPlugin
         $db = $this->_db;
 
         // create csv imports table
-        $db->query("CREATE TABLE IF NOT EXISTS `{$db->prefix}csv_import_imports` (
+        $db->query("CREATE TABLE IF NOT EXISTS `{$db->prefix}csv_import_penn_imports` (
            `id` int(10) unsigned NOT NULL auto_increment,
            `item_type_id` int(10) unsigned NULL,
            `collection_id` int(10) unsigned NULL,
@@ -124,7 +122,7 @@ class CsvImportPlugin extends Omeka_Plugin_AbstractPlugin
            ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;");
 
         // create csv imported items table
-        $db->query("CREATE TABLE IF NOT EXISTS `{$db->prefix}csv_import_imported_items` (
+        $db->query("CREATE TABLE IF NOT EXISTS `{$db->prefix}csv_import_penn_imported_items` (
           `id` int(10) unsigned NOT NULL auto_increment,
           `item_id` int(10) unsigned NOT NULL,
           `import_id` int(10) unsigned NOT NULL,
@@ -144,9 +142,9 @@ class CsvImportPlugin extends Omeka_Plugin_AbstractPlugin
         $db = $this->_db;
 
         // drop the tables
-        $sql = "DROP TABLE IF EXISTS `{$db->prefix}csv_import_imports`";
+        $sql = "DROP TABLE IF EXISTS `{$db->prefix}csv_import_penn_imports`";
         $db->query($sql);
-        $sql = "DROP TABLE IF EXISTS `{$db->prefix}csv_import_imported_items`";
+        $sql = "DROP TABLE IF EXISTS `{$db->prefix}csv_import_penn_imported_items`";
         $db->query($sql);
 
         $this->_uninstallOptions();
@@ -164,12 +162,12 @@ class CsvImportPlugin extends Omeka_Plugin_AbstractPlugin
         // Do this first because MySQL will complain about any ALTERs to a table with an
         // invalid default if we don't fix it first
         if (version_compare($oldVersion, '2.0.3', '<=')) {
-            $sql = "ALTER TABLE `{$db->prefix}csv_import_imports` MODIFY `added` timestamp NOT NULL default '2000-01-01 00:00:00'";
+            $sql = "ALTER TABLE `{$db->prefix}csv_import_penn_imports` MODIFY `added` timestamp NOT NULL default '2000-01-01 00:00:00'";
             $db->query($sql);
         }
 
         if (version_compare($oldVersion, '2.0-dev', '<=')) {
-            $sql = "UPDATE `{$db->prefix}csv_import_imports` SET `status` = ? WHERE `status` = ?";
+            $sql = "UPDATE `{$db->prefix}csv_import_penn_imports` SET `status` = ? WHERE `status` = ?";
             $db->query($sql, array('other_error', 'error'));
         }
 
@@ -178,8 +176,8 @@ class CsvImportPlugin extends Omeka_Plugin_AbstractPlugin
             set_option(CsvImport_ColumnMap_Element::ELEMENT_DELIMITER_OPTION_NAME, CsvImport_ColumnMap_Element::DEFAULT_ELEMENT_DELIMITER);
             set_option(CsvImport_ColumnMap_Tag::TAG_DELIMITER_OPTION_NAME, CsvImport_ColumnMap_Tag::DEFAULT_TAG_DELIMITER);
             set_option(CsvImport_ColumnMap_File::FILE_DELIMITER_OPTION_NAME, CsvImport_ColumnMap_File::DEFAULT_FILE_DELIMITER);
-        }   
-        
+        }
+
         if(version_compare($oldVersion, '2.0.1', '<=')) {
             $sql = "ALTER TABLE `{$db->prefix}csv_import_imports` CHANGE `item_type_id` `item_type_id` INT( 10 ) UNSIGNED NULL ,
                     CHANGE `collection_id` `collection_id` INT( 10 ) UNSIGNED NULL
@@ -205,11 +203,11 @@ class CsvImportPlugin extends Omeka_Plugin_AbstractPlugin
     {
         $acl = $args['acl']; // get the Zend_Acl
 
-        $acl->addResource('CsvImport_Index');
+        $acl->addResource('CsvImportPenn_Index');
 
         // Hack to disable CRUD actions.
-        $acl->deny(null, 'CsvImport_Index', array('show', 'add', 'edit', 'delete'));
-        $acl->deny('admin', 'CsvImport_Index');
+        $acl->deny(null, 'CsvImportPenn_Index', array('show', 'add', 'edit', 'delete'));
+        $acl->deny('admin', 'CsvImportPenn_Index');
     }
 
     /**
@@ -220,9 +218,9 @@ class CsvImportPlugin extends Omeka_Plugin_AbstractPlugin
     public function hookAdminHead($args)
     {
         $request = Zend_Controller_Front::getInstance()->getRequest();
-        if ($request->getModuleName() == 'csv-import') {
-            queue_css_file('csv-import-main');
-            queue_js_file('csv-import');
+        if ($request->getModuleName() == 'csv-import-penn') {
+            queue_css_file('csv-import-penn-main');
+            queue_js_file('csv-import-penn');
         }
     }
 
@@ -235,9 +233,9 @@ class CsvImportPlugin extends Omeka_Plugin_AbstractPlugin
     public function filterAdminNavigationMain($nav)
     {
         $nav[] = array(
-            'label' => __('CSV Import'),
-            'uri' => url('csv-import'),
-            'resource' => 'CsvImport_Index',
+            'label' => __('CSV Import Penn'),
+            'uri' => url('csv-import-penn'),
+            'resource' => 'CsvImportPenn_Index',
             'privilege' => 'index',
         );
         return $nav;
