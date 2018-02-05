@@ -1,5 +1,5 @@
 <?php
-    echo head(array('title' => __('CSV Import')));
+    echo head(array('title' => __('CSV Import Penn')));
 ?>
 <?php echo common('csvimport-nav'); ?>
 <div id="primary">

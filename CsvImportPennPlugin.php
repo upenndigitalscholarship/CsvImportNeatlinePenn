@@ -1,4 +1,4 @@
-<?php
+ <?php
 /**
 * CsvImportPennPlugin class - represents the CSV Import Penn plugin
 *
@@ -219,8 +219,8 @@ class CsvImportPennPlugin extends Omeka_Plugin_AbstractPlugin
     {
         $request = Zend_Controller_Front::getInstance()->getRequest();
         if ($request->getModuleName() == 'csv-import-penn') {
-            queue_css_file('csv-import-penn-main');
-            queue_js_file('csv-import-penn');
+            queue_css_file('csv-import-main');
+            queue_js_file('csv-import');
         }
     }
 
@@ -234,7 +234,7 @@ class CsvImportPennPlugin extends Omeka_Plugin_AbstractPlugin
     {
         $nav[] = array(
             'label' => __('CSV Import Penn'),
-            'uri' => url('csv-import-penn'),
+            'uri' => url('csv-import'),
             'resource' => 'CsvImportPenn_Index',
             'privilege' => 'index',
         );

@@ -6,7 +6,7 @@
  * @license http://www.gnu.org/licenses/gpl-3.0.txt GNU GPLv3
  * @package CsvImport
  */
-class CsvImport_IndexController extends Omeka_Controller_AbstractActionController
+class CsvImportPenn_IndexController extends Omeka_Controller_AbstractActionController
 {
     protected $_browseRecordsPerPage = 10;
     protected $_pluginConfig = array();
@@ -16,7 +16,7 @@ class CsvImport_IndexController extends Omeka_Controller_AbstractActionControlle
      */
     public function init()
     {
-        $this->session = new Zend_Session_Namespace('CsvImport');
+        $this->session = new Zend_Session_Namespace('CsvImportPenn');
         $this->_helper->db->setDefaultModelName('CsvImport_Import');
     }
 
@@ -97,7 +97,7 @@ class CsvImport_IndexController extends Omeka_Controller_AbstractActionControlle
             return;
         }
 
-        require_once CSV_IMPORT_DIRECTORY . '/forms/Mapping.php';
+        require_once CSV_IMPORT_PENN_DIRECTORY . '/forms/Mapping.php';
         $form = new CsvImport_Form_Mapping(array(
             'itemTypeId' => $this->session->itemTypeId,
             'columnNames' => $this->session->columnNames,
@@ -227,7 +227,7 @@ class CsvImport_IndexController extends Omeka_Controller_AbstractActionControlle
                     break;
                 case 'neatline':
                     $columnMaps[] = new CsvImport_ColumnMap_NeatlineCoverage($heading);
-                    break; 
+                    break;
                 case 'public':
                     $columnMaps[] = new CsvImport_ColumnMap_Public($heading);
                     break;
@@ -317,9 +317,9 @@ class CsvImport_IndexController extends Omeka_Controller_AbstractActionControlle
      */
     protected function _getMainForm()
     {
-        require_once CSV_IMPORT_DIRECTORY . '/forms/Main.php';
+        require_once CSV_IMPORT_PENN_DIRECTORY . '/forms/Main.php';
         $csvConfig = $this->_getPluginConfig();
-        $form = new CsvImport_Form_Main($csvConfig);
+        $form = new CsvImportPenn_Form_Main($csvConfig);
         return $form;
     }
 

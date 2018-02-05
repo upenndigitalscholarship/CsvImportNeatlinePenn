@@ -4,12 +4,12 @@
         array(
             'label' => 'Import Items',
             'action' => 'index',
-            'module' => 'csv-import',
+            'module' => 'csv-import-penn',
         ),
         array(
             'label' => 'Status',
             'action' => 'browse',
-            'module' => 'csv-import',
+            'module' => 'csv-import-penn',
         ),
     );
     echo nav($navArray, 'admin_navigation_settings');
