@@ -102,7 +102,7 @@ class CsvImportPennPlugin extends Omeka_Plugin_AbstractPlugin
         $db = $this->_db;
 
         // create csv imports table
-        $db->query("CREATE TABLE IF NOT EXISTS `{$db->prefix}csv_import_penn_imports` (
+        $db->query("CREATE TABLE IF NOT EXISTS `{$db->prefix}csv_import_imports` (
            `id` int(10) unsigned NOT NULL auto_increment,
            `item_type_id` int(10) unsigned NULL,
            `collection_id` int(10) unsigned NULL,
@@ -122,7 +122,7 @@ class CsvImportPennPlugin extends Omeka_Plugin_AbstractPlugin
            ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;");
 
         // create csv imported items table
-        $db->query("CREATE TABLE IF NOT EXISTS `{$db->prefix}csv_import_penn_imported_items` (
+        $db->query("CREATE TABLE IF NOT EXISTS `{$db->prefix}csv_import_imported_items` (
           `id` int(10) unsigned NOT NULL auto_increment,
           `item_id` int(10) unsigned NOT NULL,
           `import_id` int(10) unsigned NOT NULL,
@@ -142,9 +142,9 @@ class CsvImportPennPlugin extends Omeka_Plugin_AbstractPlugin
         $db = $this->_db;
 
         // drop the tables
-        $sql = "DROP TABLE IF EXISTS `{$db->prefix}csv_import_penn_imports`";
+        $sql = "DROP TABLE IF EXISTS `{$db->prefix}csv_import_imports`";
         $db->query($sql);
-        $sql = "DROP TABLE IF EXISTS `{$db->prefix}csv_import_penn_imported_items`";
+        $sql = "DROP TABLE IF EXISTS `{$db->prefix}csv_import_imported_items`";
         $db->query($sql);
 
         $this->_uninstallOptions();
@@ -162,12 +162,12 @@ class CsvImportPennPlugin extends Omeka_Plugin_AbstractPlugin
         // Do this first because MySQL will complain about any ALTERs to a table with an
         // invalid default if we don't fix it first
         if (version_compare($oldVersion, '2.0.3', '<=')) {
-            $sql = "ALTER TABLE `{$db->prefix}csv_import_penn_imports` MODIFY `added` timestamp NOT NULL default '2000-01-01 00:00:00'";
+            $sql = "ALTER TABLE `{$db->prefix}csv_import_imports` MODIFY `added` timestamp NOT NULL default '2000-01-01 00:00:00'";
             $db->query($sql);
         }
 
         if (version_compare($oldVersion, '2.0-dev', '<=')) {
-            $sql = "UPDATE `{$db->prefix}csv_import_penn_imports` SET `status` = ? WHERE `status` = ?";
+            $sql = "UPDATE `{$db->prefix}csv_import_imports` SET `status` = ? WHERE `status` = ?";
             $db->query($sql, array('other_error', 'error'));
         }
 
@@ -234,7 +234,7 @@ class CsvImportPennPlugin extends Omeka_Plugin_AbstractPlugin
     {
         $nav[] = array(
             'label' => __('CSV Import Penn'),
-            'uri' => url('csv-import'),
+            'uri' => url('csv-import-penn'),
             'resource' => 'CsvImportPenn_Index',
             'privilege' => 'index',
         );
