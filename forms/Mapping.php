@@ -7,7 +7,7 @@
  * @package CsvImport
  */
 
-class CsvImportPenn_Form_Mapping extends Omeka_Form
+class CsvImport_Form_Mapping extends Omeka_Form
 {
     private $_itemTypeId;
     private $_columnNames = array();
