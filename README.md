@@ -42,7 +42,7 @@ Import the file and confirm that the import is successful and the items have bee
 ## Authors
 
 * **Sasha Renninger** - *Initial work* - [Sasha](https://github.com/sashafr)
-* **Haoran** - *Neatline Coverage* - [Hoaran](https://github.com/)
+* **Haoran Shao** - *Neatline Coverage* 
 
 See also the list of [contributors](https://github.com/upenndigitalscholarship/CsvImportPenn) who participated in this project.
 
