@@ -67,17 +67,18 @@ class CsvImport_ColumnMap_Element extends CsvImport_ColumnMap
 
     public function _degrees_to_meters($text)
     {
-        // echo '<script>console.log("Your stuff here")</script>';
-        $values_pair = substr($text, 7, -1);
-        $values = explode(" ", $values_pair);
-        $lat = $values[0];
-        $lon = $values[1];
-        $lat_new = log(tan((90 + $lat) * M_PI / 360)) / (M_PI / 180);
-        $lat_new = $lat_new * 20037508.34 / 180; 
-        $lon_new = $lon * 20037508.34 / 180;
-        $ret = "POINT($lon_new $lat_new)";
-        // print $ret;  
-        return $ret;
+      $text = str_replace(' ', '', $text);
+      $values = explode(",", $text);
+      $lat = $values[0];
+      $lon = $values[1];
+      $lat = log(tan((90 + $lat) * pi() / 360)) / (pi() / 180);
+
+      $lon_new = $lon * 20037508.34 / 180;
+      $lat_new = $lat * 20037508.34 / 180;
+
+      $ret = "POINT($lon_new $lat_new)";
+        // print $ret;
+      return $ret;
     }
 
     /**

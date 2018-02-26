@@ -5,8 +5,8 @@
  * @package CsvImport
  * @Created by Haoran Shao for Penn museum library
  */
-class CsvImport_ColumnMap_NeatlineCoverage extends CsvImport_ColumnMap 
-{    
+class CsvImport_ColumnMap_NeatlineCoverage extends CsvImport_ColumnMap
+{
     /**
      * @param string $columnName
      */
@@ -36,23 +36,27 @@ class CsvImport_ColumnMap_NeatlineCoverage extends CsvImport_ColumnMap
         }
         return $result;
     }
-    
+
     /**
      * Return a collection by its title
      *degrees_to_meters
      * @param string $name The collection name
      * @return Collection The collection
-     */    
+     * WARNING -- this function is not used in conversion, see Element.php 
+     */
     protected function _degrees_to_meters($point)
     {
-        $values_pair = substr($point, 6, -1);
-        $values = explode(" ", $values_pair);
-        $lat = values[0];
-        $lon = values[1];
-        $lat_new = Math.log(Math.tan((90 + $lat) * Math::PI / 360)) / (Math::PI / 180);
-        
+
+        #$values_pair = substr($point, 6, -1);
+        $values = explode(", ", $point);
+        $lat = $values[0];
+        $lon = $values[1];
+        $lat = log(tan((90 + $lat) * pi() / 360)) / (pi() / 180);
+
         $lon_new = $lon * 20037508.34 / 180;
-        $ret = "$lat_new $lon_new";  
+        $lat_new = $lat * 20037508.34 / 180;
+
+        $ret = "$lon_new $lat_new";
         return $ret;
     }
 }
