@@ -123,6 +123,13 @@ class CsvImportPenn_IndexController extends Omeka_Controller_AbstractActionContr
             return;
         }
 
+        /*
+        if ($form->_isNeatlineMapped()) {
+          $this->_helper->flashMessenger(__('Please select the coverage option under Map To Element to import Neatline coordinates.'), 'error');
+          return;
+        }
+        */
+
         $csvImport = new CsvImport_Import();
         foreach ($this->session->getIterator() as $key => $value) {
             $setMethod = 'set' . ucwords($key);

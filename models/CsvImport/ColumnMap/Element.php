@@ -77,7 +77,7 @@ class CsvImport_ColumnMap_Element extends CsvImport_ColumnMap
       $lat_new = $lat * 20037508.34 / 180;
 
       $ret = "POINT($lon_new $lat_new)";
-        // print $ret;
+      
       return $ret;
     }
 

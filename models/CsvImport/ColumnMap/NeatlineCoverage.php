@@ -42,21 +42,22 @@ class CsvImport_ColumnMap_NeatlineCoverage extends CsvImport_ColumnMap
      *degrees_to_meters
      * @param string $name The collection name
      * @return Collection The collection
-     * WARNING -- this function is not used in conversion, see Element.php 
+     * WARNING -- this function is not used in conversion, see Element.php
      */
     protected function _degrees_to_meters($point)
     {
 
-        #$values_pair = substr($point, 6, -1);
-        $values = explode(", ", $point);
-        $lat = $values[0];
-        $lon = $values[1];
-        $lat = log(tan((90 + $lat) * pi() / 360)) / (pi() / 180);
+      $point = str_replace(' ', '', $point);
+      $values = explode(",", $point);
+      $lat = $values[0];
+      $lon = $values[1];
+      $lat = log(tan((90 + $lat) * pi() / 360)) / (pi() / 180);
 
-        $lon_new = $lon * 20037508.34 / 180;
-        $lat_new = $lat * 20037508.34 / 180;
+      $lon_new = $lon * 20037508.34 / 180;
+      $lat_new = $lat * 20037508.34 / 180;
 
-        $ret = "$lon_new $lat_new";
-        return $ret;
+      $ret = "POINT($lon_new $lat_new)";
+        // print $ret;
+      return $ret;
     }
 }

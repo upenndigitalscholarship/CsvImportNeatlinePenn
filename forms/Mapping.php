@@ -303,14 +303,20 @@ class CsvImport_Form_Mapping extends Omeka_Form
         $isNeatline = $this->_getRowValue($index, 'neatline');
         foreach($elementIds as $elementId) {
             // Make sure to skip empty mappings
-            if (!$elementId) {
+            if (!$elementId && !$isNeatline) {
                 continue;
             }
 
             $elementMap = new CsvImport_ColumnMap_Element($columnName, $this->_elementDelimiter);
+
+            if ($isNeatline) {
+              $elementId = 38;
+            }
+            
             $elementMap->setOptions(array('elementId' => $elementId,
-                                         'isHtml' => $isHtml,
-                                         'isNeatline' => $isNeatline));
+                                        'isHtml' => $isHtml,
+                                        'isNeatline' => $isNeatline));
+
             $columnMap[] = $elementMap;
         }
 
